@@ -1,14 +1,16 @@
 
-public class Subtask extends Task {
+public class Subtask extends Epic {
     String name = "";
+    int id = 0;
     String description = "";
     String status = "";
 
 
-    public Subtask(String name, String description, String status, String name1, String description1, String status1) {
-        super(name, description, status);
-        this.name = name1;
-        this.description = description1;
-        this.status = status1;
+    public Subtask(String name, int id, String description, String status) {
+        super(name, id, description, status);
+        this.name = name;
+        this.id = id;
+        this.description = description;
+        this.status = status;
     }
 }
