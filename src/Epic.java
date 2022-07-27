@@ -1,18 +1,33 @@
-public class Epic extends Task{
-    String name = "";
-    int id = 0;
-    String description = "";
-    private String status = "";
+import java.util.ArrayList;
 
-    public String getEpicStatus() {
-        return status;
+public class Epic extends Task{
+    protected ArrayList<Integer> subtaskIds;
+
+    public Epic(int id, String name, String description, String status) {
+        super(id, name, description, status);
+        subtaskIds=new ArrayList<>();
     }
 
-    public Epic(String name, int id, String description, String status) {
-        super(name, id, description, status);
-        this.name = name;
-        this.id = id;
-        this.description = description;
-        this.status = getEpicStatus();
+    public void addSubtask(int subId){
+        this.subtaskIds.add(subId);
+    }
+
+    public ArrayList<Integer> getSubtasksId() {
+        return subtaskIds;
+    }
+
+    public void setSubtasksId(ArrayList<Integer> subtasksId) {
+        this.subtaskIds = subtasksId;
+    }
+
+    @Override
+    public String toString() {
+        return "Epic{" +
+                "subTaskIds=" + subtaskIds +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }
