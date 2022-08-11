@@ -1,4 +1,4 @@
-import Manager.Manager;
+import Manager.InMemoryTaskManager;
 import Models.Epic;
 import Models.Subtask;
 import Models.Task;
@@ -6,26 +6,30 @@ import Models.Task;
 public class Main {
     public static void main(String[] args) {
 
-        Manager manager = new Manager();
+        InMemoryTaskManager manager = new InMemoryTaskManager();
 
         System.out.println("Создаю простую задачу...");
         Task task = new Task(0,"Задача","Описание задачи","NEW");
         manager.addTask(task);
+        manager.getHistory();
 
         System.out.println("Создаю эпик с 2-я подзадачами...");
         Epic epic = new Epic(0,"Эпик", "Описание эпика","NEW");
         manager.addEpic(epic);
         manager.updateEpicStatus(epic);
+        manager.getHistory();
 
         System.out.println("Создаю 1-ю подзадачу эпика...");
         Subtask subtaskFirst = new Subtask(0,"Первая подзадача", "Описание первой подзадачи","NEW", epic.getId());
         manager.addSubtask(subtaskFirst);
         manager.updateEpicStatus(epic);
+        manager.getHistory();
 
         System.out.println("Создаю 2-ю подзадачу эпика...");
         Subtask subtaskSecond = new Subtask(0,"Вторая подзадача", "Описание второй подзадачи", "NEW", epic.getId());
         manager.addSubtask(subtaskSecond);
         manager.updateEpicStatus(epic);
+        manager.getHistory();
 
         System.out.println("Вывожу список всех задач, эпиков и его подзадач...");
         manager.printAndGetTasks();
@@ -49,6 +53,7 @@ public class Main {
         System.out.println("Удаляю вторую подзадачу...");
         manager.deleteSubtaskById(2);
         manager.updateEpicStatus(epic);
+        manager.getHistory();
 
         System.out.println("Вывожу обновленный список всех задач, эпиков и подзадач...");
         manager.printAndGetTasks();
@@ -58,6 +63,7 @@ public class Main {
         System.out.println("Удаляю все задачи...");
         manager.deleteAllEpics();
         manager.updateEpicStatus(epic);
+        manager.getHistory();
 
         System.out.println("Вывожу обновленный список всех задач, эпиков и подзадач...");
         System.out.println("Тут должен быть только эпик с одной задачей, если не так, то все плохо.");
