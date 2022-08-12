@@ -1,22 +1,23 @@
 package Manager;
 
 import Models.Epic;
+import Models.Status;
 import Models.Subtask;
 import Models.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static Models.Status.*;
+
 public class InMemoryTaskManager implements Manager {
 
     private int id = 1;
 
     // Возможность хранить задачи всех типов.
-    public HashMap<Integer, Task> listTask = new HashMap<>();
-    public HashMap <Integer, Epic> listEpic = new HashMap<>();
-    public HashMap <Integer, Subtask> listSubtask = new HashMap<>();
-    // Список просмотренных задач
-    public ArrayList<Task> watchedTasksList = new ArrayList<>();
+    private HashMap <Integer, Task> listTask = new HashMap<>();
+    private HashMap <Integer, Epic> listEpic = new HashMap<>();
+    private HashMap <Integer, Subtask> listSubtask = new HashMap<>();
 
     // Создание задачи
     @Override
@@ -251,10 +252,10 @@ public class InMemoryTaskManager implements Manager {
     public void updateEpicStatus(Epic epic){
         ArrayList<Integer> subs = epic.getSubtaskIds();
         if(subs.isEmpty()){
-            epic.setStatus("NEW");
+            epic.setStatus(NEW);
             return;
         }
-        String status = null;
+        Status status = null;
         for(int id : subs){
             final Subtask subtask = listSubtask.get(id);
             if(status==null){
@@ -264,7 +265,7 @@ public class InMemoryTaskManager implements Manager {
             if(status.equals(subtask.getStatus())&&!status.equals("IN_PROGRESS")){
                 continue;
             }
-            epic.setStatus("IN_PROGRESS");
+            epic.setStatus(IN_PROGRESS);
             return;
         }
         epic.setStatus(status);
@@ -278,47 +279,36 @@ public class InMemoryTaskManager implements Manager {
 
         ArrayList<Integer> subs = epic.getSubtaskIds();
         if(subs.isEmpty()){
-            epic.setStatus("NEW");
+            epic.setStatus(NEW);
             return;
         }
-        String status = null;
+        Status status = null;
         for(int id : subs){
             final Subtask subtask = listSubtask.get(id);
             status = subtask.getStatus();
 
-            if(status.equals("NEW")){
+            if(status.equals(NEW)){
                 newNum++;
             }
-            if(status.equals("DONE")){
+            if(status.equals(DONE)){
                 doneNum++;
             }
 
         }
         if(newNum==0||newNum==epic.getSubtaskIds().size()){
-            epic.setStatus("NEW");
+            epic.setStatus(NEW);
         } else if (doneNum==epic.getSubtaskIds().size()) {
-            epic.setStatus("DONE");
+            epic.setStatus(DONE);
         }else{
-            epic.setStatus("IN_PROGRESS");
+            epic.setStatus(IN_PROGRESS);
         }
     }
 
-    // Метод выводит на экран список 10 последних просмотренных задач
     @Override
-    public ArrayList<Task> getHistory() {
-        // айдия хочет заменить ArrayList на void
-
-        if(watchedTasksList.size()>10){
-            Task elementToDelete = watchedTasksList.get(0);
-            watchedTasksList.remove(elementToDelete);
-        }
-        System.out.println("Вывожу список последних 10 задач: ");
-        for (Task task : watchedTasksList){
-            System.out.println(task.toString());
-        }
-
-        return watchedTasksList;
+    public void getHistory() {
+        // здесь айдия настойчиво просит переопределить этот метод
+        // но я пока не понимаю как
+        // и нужно ли
     }
-
 
 }

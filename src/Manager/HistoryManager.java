@@ -11,6 +11,8 @@ public interface HistoryManager {
     void add(Task task);
 
     // должен помечать задачи как просмотренные
-    ArrayList<Task> getHistory();
+    ArrayList getHistory = new ArrayList<Task>();
 
+    // получить этот список из 10 последних тасок
+    ArrayList<Task> getHistory();
 }

@@ -5,14 +5,8 @@ import Models.Subtask;
 import Models.Task;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public interface Manager {
-
-    // Возможность хранить задачи всех типов.
-    public HashMap<Integer, Task> listTask = new HashMap<>();
-    public HashMap <Integer, Epic> listEpic = new HashMap<>();
-    public HashMap <Integer, Subtask> listSubtask = new HashMap<>();
 
     // Создание задачи
     void addTask(Task task);
