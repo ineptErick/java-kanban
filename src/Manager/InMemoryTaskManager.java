@@ -48,33 +48,21 @@ public class InMemoryTaskManager implements Manager {
     //Получение списка всех задач.
     @Override
     public ArrayList<Task> printAndGetTasks(){
-        ArrayList<Task> tasksArray = new ArrayList<>();
         if(listTask.isEmpty()){
             System.out.println("Нет доступных задач.");
-        }else{
-            for(Integer id : listTask.keySet()){
-                for(Task tsk : listTask.values()){
-                    tasksArray.add(id,tsk);
-                }
-            }
+            return null;
         }
-        return tasksArray;
+            return new ArrayList<>(listTask.values());
     }
 
     @Override
     //Получение списка всех эпиков.
     public ArrayList<Epic> printAndGetEpics(){
-        ArrayList<Epic> epicsArray = new ArrayList<>();
-        if(listEpic.isEmpty()){
+        if(listEpic.isEmpty()) {
             System.out.println("Нет доступных эпиков.");
-        }else{
-            for(Integer id : listEpic.keySet()){
-                for(Epic subtask : listEpic.values()){
-                    epicsArray.add(id,subtask);
-                }
-            }
+            return null;
         }
-        return epicsArray;
+        return new ArrayList<>(listEpic.values());
     }
 
     @Override
@@ -83,14 +71,9 @@ public class InMemoryTaskManager implements Manager {
         ArrayList<Subtask> subtasksArray = new ArrayList<>();
         if(listSubtask.isEmpty()){
             System.out.println("Нет доступных подзадач.");
-        }else{
-            for(Integer id : listSubtask.keySet()){
-                for(Subtask subtask : listSubtask.values()){
-                    subtasksArray.add(id,subtask);
-                }
-            }
+            return null;
         }
-        return subtasksArray;
+        return new ArrayList<>(listSubtask.values());
     }
 
     @Override
