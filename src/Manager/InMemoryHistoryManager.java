@@ -7,13 +7,14 @@ import java.util.ArrayList;
 public class InMemoryHistoryManager implements HistoryManager {
     // здесь храним поступающие таски
     private final ArrayList<Task> watchedTasksList = new ArrayList<>();
+    private final int ONE_STEP_METER = 10;
 
     // метод добавляет таску в список
     // если тасок уже больше 10, то удаляем первую
     @Override
     public void add(Task task) {
         watchedTasksList.add(task);
-        if(watchedTasksList.size()>10){
+        if (watchedTasksList.size()>ONE_STEP_METER) {
             watchedTasksList.remove(0);
         }
     }
@@ -29,7 +30,4 @@ public class InMemoryHistoryManager implements HistoryManager {
     public String toString() {
         return "Последние 10 тасок: " + watchedTasksList;
     }
-
-    // должен помечать задачи как просмотренные
-    // ArrayList getHistory = new ArrayList<Task>();
 }

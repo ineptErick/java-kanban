@@ -23,8 +23,8 @@ public class Epic extends Task{
         this.subtaskIds = subtasksId;
     }
 
-    public ArrayList<Integer> getSubtaskIds() {
-        return (ArrayList<Integer>) subtaskIds;
+    public List<Integer> getSubtaskIds() {
+        return subtaskIds;
     }
 
     @Override

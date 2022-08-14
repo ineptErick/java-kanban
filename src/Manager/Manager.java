@@ -5,6 +5,7 @@ import Models.Subtask;
 import Models.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface Manager {
 
@@ -83,7 +84,7 @@ public interface Manager {
 
     // Дополнительные методы:
     // Получение списка всех подзадач определённого эпика.
-    ArrayList<Task> getSubtaskListByEpic(Epic epic);
+    List<Task> getSubtaskListByEpic(Epic epic);
 
 
     // Обновление статуса эпика.
