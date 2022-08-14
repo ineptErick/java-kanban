@@ -1,4 +1,3 @@
-import Manager.InMemoryTaskManager;
 import Manager.Manager;
 import Manager.Managers;
 import Models.Epic;
@@ -15,6 +14,7 @@ public class Main {
         System.out.println("Создаю простую задачу...");
         Task task = new Task(0,"Задача","Описание задачи",NEW);
         manager.addTask(task);
+
         manager.getHistory();
 
         System.out.println("Создаю эпик с 2-я подзадачами...");
@@ -45,7 +45,8 @@ public class Main {
         manager.updateTask(taskUpdated);
 
         System.out.println("Обновляю первую подзадачу...");
-        Subtask subtaskFirstUpdated = new Subtask(2,"Обновленная первая подзадача","Обновленное описание первой задачи",NEW, epic.getId());
+        Subtask subtaskFirstUpdated = new Subtask(2,"Обновленная первая подзадача",
+                "Обновленное описание первой задачи",NEW, epic.getId());
         manager.updateSubtask(epic, subtaskFirstUpdated);
         manager.updateEpicStatus(epic);
 

@@ -1,14 +1,14 @@
 package Models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task{
 
-    private ArrayList<Integer> subtaskIds;
+    private List<Integer> subtaskIds = new ArrayList<>();
 
     public Epic(int id, String name, String description, Status status) {
         super(id, name, description, status);
-        subtaskIds=new ArrayList<>();
     }
 
     public void addSubtask(int subId){
@@ -16,7 +16,7 @@ public class Epic extends Task{
     }
 
     public ArrayList<Integer> getSubtasksId() {
-        return subtaskIds;
+        return (ArrayList<Integer>) subtaskIds;
     }
 
     public void setSubtasksId(ArrayList<Integer> subtasksId) {
@@ -24,7 +24,7 @@ public class Epic extends Task{
     }
 
     public ArrayList<Integer> getSubtaskIds() {
-        return subtaskIds;
+        return (ArrayList<Integer>) subtaskIds;
     }
 
     @Override

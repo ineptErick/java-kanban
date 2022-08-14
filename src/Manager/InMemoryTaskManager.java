@@ -18,12 +18,14 @@ public class InMemoryTaskManager implements Manager {
     private HashMap <Integer, Task> listTask = new HashMap<>();
     private HashMap <Integer, Epic> listEpic = new HashMap<>();
     private HashMap <Integer, Subtask> listSubtask = new HashMap<>();
+    private HistoryManager history = Managers.getDefaultHistory();
 
     // Создание задачи
     @Override
     public void addTask(Task task) {
         task.setId(id++);
         listTask.put(task.getId(), task);
+        history.add(task);
     }
 
     // Создание эпика
@@ -31,6 +33,7 @@ public class InMemoryTaskManager implements Manager {
     public void addEpic(Epic epic) {
         epic.setId(id++);
         listEpic.put(epic.getId(),epic);
+        history.add(epic);
     }
 
     // Создание подзадачи
@@ -41,7 +44,7 @@ public class InMemoryTaskManager implements Manager {
         subtask.setId(id++);
         listSubtask.put(subtask.getId(), subtask);
         epic.addSubtask(subtask.getId());
-        // !!!
+        history.add(epic);
         updateEpic(epic);
     }
 
@@ -52,7 +55,7 @@ public class InMemoryTaskManager implements Manager {
             System.out.println("Нет доступных задач.");
             return null;
         }
-            return new ArrayList<>(listTask.values());
+        return new ArrayList<>(listTask.values());
     }
 
     @Override
@@ -68,7 +71,6 @@ public class InMemoryTaskManager implements Manager {
     @Override
     //Получение списка всех подзадач.
     public ArrayList<Subtask> printAndGetSubtasks(){
-        ArrayList<Subtask> subtasksArray = new ArrayList<>();
         if(listSubtask.isEmpty()){
             System.out.println("Нет доступных подзадач.");
             return null;
@@ -186,7 +188,6 @@ public class InMemoryTaskManager implements Manager {
     public void deleteEpicById(int id){
         if(listEpic.containsKey(id)){
             Epic currentEpic = getEpicById(id);
-            ArrayList<Task> currentSubtasksList = getSubtaskListByEpic(currentEpic);
             deleteAllSubtasks(currentEpic);
             listEpic.remove(id);
             System.out.println("Эпик удален.");
@@ -288,10 +289,9 @@ public class InMemoryTaskManager implements Manager {
     }
 
     @Override
-    public void getHistory() {
-        // здесь айдия настойчиво просит переопределить этот метод
-        // но я пока не понимаю как
-        // и нужно ли
+    public ArrayList<Task> getHistory() {
+        return history.getHistory();
     }
+
 
 }

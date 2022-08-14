@@ -95,7 +95,7 @@ public interface Manager {
 
 
     // История просмотров задач
-    void getHistory();
+    ArrayList<Task> getHistory();
 
 
 }
