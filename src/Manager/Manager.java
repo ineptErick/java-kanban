@@ -99,4 +99,5 @@ public interface Manager {
     ArrayList<Task> getHistory();
 
 
+    void remove(int i);
 }

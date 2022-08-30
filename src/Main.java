@@ -57,6 +57,7 @@ public class Main {
 
         System.out.println("Удаляю вторую подзадачу...");
         manager.deleteSubtaskById(2);
+        manager.remove(2);
         manager.updateEpicStatus(epic);
         manager.getHistory();
 
