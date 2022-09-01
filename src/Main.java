@@ -11,70 +11,59 @@ public class Main {
 
         Manager manager = Managers.getDefault();
 
-        System.out.println("Создаю простую задачу...");
-        Task task = new Task(0,"Задача","Описание задачи",NEW);
-        manager.addTask(task);
-
-        manager.getHistory();
-
-        System.out.println("Создаю эпик с 2-я подзадачами...");
-        Epic epic = new Epic(0,"Эпик", "Описание эпика",NEW);
-        manager.addEpic(epic);
-        manager.updateEpicStatus(epic);
+        // создайте две задачи,
+        // эпик с тремя подзадачами
+        System.out.println("Создаю эпик с 3-я подзадачами...");
+        Epic epicFirst = new Epic(0,"Эпик", "Описание эпика",NEW);
+        manager.addEpic(epicFirst);
+        manager.updateEpicStatus(epicFirst);
         manager.getHistory();
 
         System.out.println("Создаю 1-ю подзадачу эпика...");
-        Subtask subtaskFirst = new Subtask(0,"Первая подзадача", "Описание первой подзадачи",NEW, epic.getId());
+        Subtask subtaskFirst = new Subtask(1,"Первая подзадача", "Описание первой подзадачи",NEW, epic.getId());
         manager.addSubtask(subtaskFirst);
-        manager.updateEpicStatus(epic);
+        manager.updateEpicStatus(epicFirst);
         manager.getHistory();
 
         System.out.println("Создаю 2-ю подзадачу эпика...");
-        Subtask subtaskSecond = new Subtask(0,"Вторая подзадача", "Описание второй подзадачи", NEW, epic.getId());
+        Subtask subtaskSecond = new Subtask(2,"Вторая подзадача", "Описание второй подзадачи", NEW, epic.getId());
         manager.addSubtask(subtaskSecond);
-        manager.updateEpicStatus(epic);
+        manager.updateEpicStatus(epicFirst);
         manager.getHistory();
 
-        System.out.println("Вывожу список всех задач, эпиков и его подзадач...");
-        manager.printAndGetTasks();
+        System.out.println("Создаю 3-ю подзадачу эпика...");
+        Subtask subtaskThird = new Subtask(3,"Третья подзадача", "Описание второй подзадачи", NEW, epic.getId());
+        manager.addSubtask(subtaskSecond);
+        manager.updateEpicStatus(epicFirst);
+        manager.getHistory();
+
+        // и эпик без подзадач
+        System.out.println("Создаю эпик без подзадач...");
+        Epic epicSecond = new Epic(4,"Эпик", "Описание эпика",NEW);
+        manager.addEpic(epicSecond);
+        manager.updateEpicStatus(epicSecond);
+        manager.getHistory();
+
+        // запросите созданные задачи несколько раз в разном порядке;
         manager.printAndGetEpics();
-        manager.updateEpicStatus(epic);
 
-        System.out.println("Обновляю задачу...");
-        Task taskUpdated = new Task(1,"Обновленная задача","Описание обновленной задачи",NEW);
-        manager.updateTask(taskUpdated);
+        // после каждого запроса выведите историю и убедитесь,
+        // что в ней нет повторов;
+        manager.getHistory();
 
-        System.out.println("Обновляю первую подзадачу...");
-        Subtask subtaskFirstUpdated = new Subtask(2,"Обновленная первая подзадача",
-                "Обновленное описание первой задачи",NEW, epic.getId());
-        manager.updateSubtask(epic, subtaskFirstUpdated);
-        manager.updateEpicStatus(epic);
-
-        System.out.println("Вывожу обновленный список всех задач, эпиков и подзадач...");
-        manager.printAndGetTasks();
-        manager.printAndGetEpics();
-        manager.updateEpicStatus(epic);
-
-        System.out.println("Удаляю вторую подзадачу...");
+        // удалите задачу, которая есть в истории,
+        // и проверьте, что при печати она не будет выводиться;
         manager.deleteSubtaskById(2);
         manager.remove(2);
-        manager.updateEpicStatus(epic);
+        manager.updateEpicStatus(epicFirst);
         manager.getHistory();
 
-        System.out.println("Вывожу обновленный список всех задач, эпиков и подзадач...");
-        manager.printAndGetTasks();
-        manager.printAndGetEpics();
-        manager.updateEpicStatus(epic);
-
-        System.out.println("Удаляю все задачи...");
-        manager.deleteAllEpics();
-        manager.updateEpicStatus(epic);
+        // удалите эпик с тремя подзадачами и убедитесь,
+        // что из истории удалился как сам эпик,
+        // так и все его подзадачи.
+        manager.deleteEpickById(0);
+        manager.remove(0);
+        manager.updateEpicStatus(epicFirst);
         manager.getHistory();
-
-        System.out.println("Вывожу обновленный список всех задач, эпиков и подзадач...");
-        System.out.println("Тут должен быть только эпик с одной задачей, если не так, то все плохо.");
-        manager.printAndGetTasks();
-        manager.printAndGetEpics();
-        manager.updateEpicStatus(epic);
     }
 }

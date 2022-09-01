@@ -10,10 +10,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     private final ArrayList<Task> watchedTasksList = new ArrayList<>();
     private final int ONE_STEP_METER = 10;
 
-    // хранение порядка вызовов
-    // ключ - id задачи, просмотр которой требуется удалить
-    // значение — место просмотра этой задачи в списке - узел связного списка
-    private final Map<Integer, Node> tasksOrder = new HashMap<>();
 
     // метод добавляет таску в список
     // если тасок уже больше 10, то удаляем первую
@@ -25,13 +21,17 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         // Если какая-либо задача просматривалась несколько раз,
         // в истории должен отобразиться только последний просмотр.
-        // Предыдущий просмотр должен быть удалён сразу же после появления нового
+
         if (watchedTasksList.contains(task)){
             watchedTasksList.remove(task.getId());
+            // Предыдущий просмотр должен быть удалён сразу же после появления нового
+            // как вот это релизовать пока не понимаю
         }
     }
 
     // получить этот список из 10 последних тасок
+    // Реализация метода getHistory должна перекладывать
+    // задачи из связного списка в ArrayList для формирования ответа.
     @Override
     public ArrayList<Task> getHistory() {
         for(Task task : tasksOrder.values()){
@@ -46,6 +46,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         for(Integer number : tasksOrder.keySet()){
             if(id==number){
                 tasksOrder.remove(id);
+                watchedTasksList.remove(id);
             }
         }
     }
@@ -60,9 +61,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
 
     // двусвязный список задач
-    private List<Task> customLinkedList = new LinkedList<>();
+    private List<Node> customLinkedList = new LinkedList<>();
 
-    public List<Task> getCustomLinkedList() {
+    public List<Node> getCustomLinkedList() {
         return customLinkedList;
     }
 
@@ -79,7 +80,24 @@ public class InMemoryHistoryManager implements HistoryManager {
     // собирает задачи из него в обычный ArrayList
     ArrayList<Task> getTasks(){
         ArrayList<Task> customArrayList = new ArrayList<>(customLinkedList);
+        for(Node node : customLinkedList){
+            customArrayList.add(node);
+        }
         return customArrayList;
     }
+
+    void removeNode(Node node){
+        for(Node n : customLinkedList){
+            if(n==node){
+                customLinkedList.remove(n);
+            }
+        }
+    }
+
+    // хранение порядка вызовов
+    // ключ - id задачи, просмотр которой требуется удалить
+    // значение — место просмотра этой задачи в списке - узел связного списка
+    private final Map<Integer, Node> tasksOrder = new HashMap<>();
+
 }
 
