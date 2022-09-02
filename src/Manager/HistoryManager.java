@@ -2,8 +2,6 @@ package Manager;
 
 import Models.Task;
 
-import java.util.ArrayList;
-
 // интерфейс для управления историей просмотров
 public interface HistoryManager {
 
@@ -14,6 +12,6 @@ public interface HistoryManager {
     void remove(int id);
 
     // получить этот список из 10 последних тасок
-    ArrayList<Task> getHistory();
+    InMemoryHistoryManager.CustomLinkedList getHistory();
 
 }
