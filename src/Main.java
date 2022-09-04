@@ -29,17 +29,17 @@ public class Main {
         manager.updateEpicStatus(epicFirst);
 
         System.out.println("Создаю 1-ю подзадачу эпика...");
-        Subtask subtaskFirst = new Subtask("Первая подзадача первого эпика", "Описание первой подзадачи",NEW, 2);
+        Subtask subtaskFirst = new Subtask("Первая подзадача первого эпика", "Описание первой подзадачи",NEW, epicFirst.getId());
         manager.addSubtask(subtaskFirst);
         manager.updateEpicStatus(epicFirst);
 
         System.out.println("Создаю 2-ю подзадачу эпика...");
-        Subtask subtaskSecond = new Subtask("Вторая подзадача первого эпика", "Описание второй подзадачи", NEW, 2);
+        Subtask subtaskSecond = new Subtask("Вторая подзадача первого эпика", "Описание второй подзадачи", NEW, epicFirst.getId());
         manager.addSubtask(subtaskSecond);
         manager.updateEpicStatus(epicFirst);
 
         System.out.println("Создаю 3-ю подзадачу эпика...");
-        Subtask subtaskThird = new Subtask("Третья подзадача первого эпика", "Описание второй подзадачи", NEW, 2);
+        Subtask subtaskThird = new Subtask("Третья подзадача первого эпика", "Описание второй подзадачи", NEW, epicFirst.getId());
         manager.addSubtask(subtaskSecond);
         manager.updateEpicStatus(epicFirst);
 
@@ -74,20 +74,17 @@ public class Main {
 
         // удалите задачу, которая есть в истории,
         // и проверьте, что при печати она не будет выводиться;
-        System.out.println("Удаляю задачу с индексом 2...");
-        manager.deleteEpicById(2);
-        manager.remove(subtaskSecond.getId());
-        manager.updateEpicStatus(epicFirst);
+        System.out.println("Удаляю вторую задачу...");
+        manager.deleteTaskById(taskSecond.getId());
         manager.getHistory();
-        System.out.println("Задача должна быть удалена.");
+        System.out.println("Вторая задача должна быть удалена.");
 
         // удалите эпик с тремя подзадачами и убедитесь,
         // что из истории удалился как сам эпик,
         // так и все его подзадачи.
         System.out.println("Удаляю эпик с тремя подзадачами...");
         manager.deleteEpicById(epicFirst.getId());
-        manager.remove(epicFirst.getId());
-        manager.updateEpicStatus(epicFirst);
+        manager.getEpicById(epicFirst.getId());
         manager.getHistory();
         System.out.println("Эпик с тремя подзадачами должен быть удален.");
 

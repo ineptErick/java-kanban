@@ -48,7 +48,7 @@ public class InMemoryTaskManager implements Manager {
         subtask.setId(id++);
         listSubtask.put(subtask.getId(), subtask);
         epic.addSubtask(subtask.getId());
-        //history.add(epic);
+        history.add(epic);
         updateEpic(epic);
         return subtask.getId();
     }
