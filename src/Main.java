@@ -13,74 +13,84 @@ public class Main {
 
         // создайте две задачи
         System.out.println("Создаю первую задачу...");
-        Task taskFirst = new Epic(0,"Первая задача", "Описание первой задачи",NEW);
+        Task taskFirst = new Task("Первая задача", "Описание первой задачи",NEW);
         manager.addTask(taskFirst);
         manager.updateTask(taskFirst);
-        manager.getHistory();
 
         System.out.println("Создаю вторую задачу...");
-        Task taskSecond = new Epic(1,"Вторая задача", "Описание второй задачи",NEW);
+        Task taskSecond = new Task("Вторая задача", "Описание второй задачи",NEW);
         manager.addTask(taskSecond);
         manager.updateTask(taskSecond);
-        manager.getHistory();
 
         // эпик с тремя подзадачами
         System.out.println("Создаю эпик с 3-я подзадачами...");
-        Epic epicFirst = new Epic(2,"Эпик с тремя подзадачами", "Описание эпика с тремя подзадачами",NEW);
+        Epic epicFirst = new Epic("Эпик с тремя подзадачами", "Описание эпика с тремя подзадачами",NEW);
         manager.addEpic(epicFirst);
         manager.updateEpicStatus(epicFirst);
-        manager.getHistory();
 
         System.out.println("Создаю 1-ю подзадачу эпика...");
-        Subtask subtaskFirst = new Subtask(3,"Первая подзадача первого эпика", "Описание первой подзадачи",NEW, epicFirst.getId());
+        Subtask subtaskFirst = new Subtask("Первая подзадача первого эпика", "Описание первой подзадачи",NEW, 2);
         manager.addSubtask(subtaskFirst);
         manager.updateEpicStatus(epicFirst);
-        manager.getHistory();
 
         System.out.println("Создаю 2-ю подзадачу эпика...");
-        Subtask subtaskSecond = new Subtask(4,"Вторая подзадача первого эпика", "Описание второй подзадачи", NEW, epicFirst.getId());
+        Subtask subtaskSecond = new Subtask("Вторая подзадача первого эпика", "Описание второй подзадачи", NEW, 2);
         manager.addSubtask(subtaskSecond);
         manager.updateEpicStatus(epicFirst);
-        manager.getHistory();
 
         System.out.println("Создаю 3-ю подзадачу эпика...");
-        Subtask subtaskThird = new Subtask(5,"Третья подзадача первого эпика", "Описание второй подзадачи", NEW, epicFirst.getId());
+        Subtask subtaskThird = new Subtask("Третья подзадача первого эпика", "Описание второй подзадачи", NEW, 2);
         manager.addSubtask(subtaskSecond);
         manager.updateEpicStatus(epicFirst);
-        manager.getHistory();
 
         // и эпик без подзадач
         System.out.println("Создаю эпик без подзадач...");
-        Epic epicSecond = new Epic(6,"Эпик", "Описание эпика без подзадач",NEW);
+        Epic epicSecond = new Epic("Эпик", "Описание эпика без подзадач",NEW);
         manager.addEpic(epicSecond);
         manager.updateEpicStatus(epicSecond);
-        manager.getHistory();
 
         // запросите созданные задачи несколько раз в разном порядке;
-        manager.getTaskById(6);
+        System.out.println("Запрашиваю таску с индексом 6...");
+        manager.getEpicById(6);
+        int taskSecondId = manager.addTask(taskSecond);
+        manager.getHistory();
+        System.out.println("Запрашиваю таску с индексом 0...");
         manager.getTaskById(0);
-        manager.getTaskById(2);
-        manager.getTaskById(6);
-        manager.getTaskById(2);
+        manager.getHistory();
+        System.out.println("Запрашиваю таску с индексом 2...");
+        manager.getEpicById(2);
+        manager.getHistory();
+        System.out.println("Запрашиваю таску с индексом 6 еще раз...");
+        manager.getEpicById(6);
+        manager.getHistory();
+        System.out.println("Запрашиваю таску с индексом 2 еще раз...");
+        manager.getEpicById(2);
+        manager.getHistory();
 
         // после каждого запроса выведите историю и убедитесь,
         // что в ней нет повторов;
         manager.getHistory();
-        // должно быть 0 6 2
+        // в итоге должно быть 0 6 2
 
         // удалите задачу, которая есть в истории,
         // и проверьте, что при печати она не будет выводиться;
-        manager.deleteSubtaskById(subtaskSecond.getId());
+        System.out.println("Удаляю задачу с индексом 2...");
+        manager.deleteEpicById(2);
         manager.remove(subtaskSecond.getId());
         manager.updateEpicStatus(epicFirst);
         manager.getHistory();
+        System.out.println("Задача должна быть удалена.");
 
         // удалите эпик с тремя подзадачами и убедитесь,
         // что из истории удалился как сам эпик,
         // так и все его подзадачи.
+        System.out.println("Удаляю эпик с тремя подзадачами...");
         manager.deleteEpicById(epicFirst.getId());
         manager.remove(epicFirst.getId());
         manager.updateEpicStatus(epicFirst);
         manager.getHistory();
+        System.out.println("Эпик с тремя подзадачами должен быть удален.");
+
+        System.out.println("Конец программы.");
     }
 }

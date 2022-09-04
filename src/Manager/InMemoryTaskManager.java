@@ -24,30 +24,33 @@ public class InMemoryTaskManager implements Manager {
 
     // Создание задачи
     @Override
-    public void addTask(Task task) {
+    public int addTask(Task task) {
         task.setId(id++);
         listTask.put(task.getId(), task);
-        history.add(task);
+        //history.add(task);
+        return task.getId();
     }
 
     // Создание эпика
     @Override
-    public void addEpic(Epic epic) {
+    public int addEpic(Epic epic) {
         epic.setId(id++);
         listEpic.put(epic.getId(),epic);
-        history.add(epic);
+        //history.add(epic);
+        return epic.getId();
     }
 
     // Создание подзадачи
     @Override
-    public void addSubtask(Subtask subtask) {
+    public int addSubtask(Subtask subtask) {
         int epicId = subtask.getEpicId();
         Epic epic = listEpic.get(epicId);
         subtask.setId(id++);
         listSubtask.put(subtask.getId(), subtask);
         epic.addSubtask(subtask.getId());
-        history.add(epic);
+        //history.add(epic);
         updateEpic(epic);
+        return subtask.getId();
     }
 
     //Получение списка всех задач.
@@ -85,6 +88,7 @@ public class InMemoryTaskManager implements Manager {
     public void deleteAllTasks(){
         if(listTask.isEmpty()){
             System.out.println("Нет доступных задач для удаления.");
+            return;
         }else{
             listTask.clear();
         }
@@ -95,42 +99,41 @@ public class InMemoryTaskManager implements Manager {
     public void deleteAllEpics(){
         if(listEpic.isEmpty()){
             System.out.println("Нет доступных эпиков для удаления.");
+            return;
         }else{
+            listSubtask.clear();
             listEpic.clear();
         }
     }
 
     @Override
     //Удаление всех подзадач.
-    public void deleteAllSubtasks(Epic epic){
-        if(listEpic.containsValue(epic)){
-            List<Task> currentSubtasksList = getSubtaskListByEpic(epic);
-            for(Task subtask : currentSubtasksList){
-                int subtaskId = subtask.getId();
-                deleteSubtaskById(subtaskId);
-            }
-        }else{
+    public void deleteAllSubtasks(){
+        if(listSubtask.isEmpty()){
             System.out.println("Нет доступных подзадач для удаления.");
+            return;
         }
-
-        updateEpicStatus(epic);
+        listSubtask.clear();
     }
 
     @Override
     //Получение задачи по идентификатору.
     public Task getTaskById(int id){
+        history.add(listTask.get(id));
         return listTask.get(id);
     }
 
     @Override
     //Получение эпика по идентификатору.
     public Epic getEpicById(int id){
+        history.add(listEpic.get(id));
         return listEpic.get(id);
     }
 
     @Override
     //Получение подзадачи по идентификатору.
     public Subtask getSubtaskById(int id){
+        history.add(listSubtask.get(id));
         return listSubtask.get(id);
     }
 
@@ -152,25 +155,28 @@ public class InMemoryTaskManager implements Manager {
     public void updateEpic(Epic epic){
         if(listEpic.containsKey(epic.getId())){
             listEpic.put(epic.getId(),epic);
+            updateEpicStatus(epic);
             System.out.println("Эпик обновлен!");
         }else{
             System.out.println("Эпика с таким id не существует.");
             System.out.println("Не удалось обновить эпик.");
         }
-        updateEpicStatus(epic);
     }
 
     @Override
     // Обновление подзадачи.
-    public void updateSubtask(Epic epic, Subtask subtask){
+    public void updateSubtask(Subtask subtask){
         if(listSubtask.containsKey(subtask.getId())){
-            listSubtask.put(subtask.getId(),subtask);
-            System.out.println("Подзадача обновлена!");
+            Epic epic = listEpic.get(subtask.getEpicId());
+            if(listEpic.containsKey(epic.getId())){
+                listSubtask.put(subtask.getId(),subtask);
+                updateEpicStatus(epic);
+                System.out.println("Подзадача обновлена!");
+            }
         }else{
             System.out.println("Подзадачи с таким id не существует.");
             System.out.println("Не удалось обновить подзадачу.");
         }
-        updateEpicStatus(epic);
     }
 
     @Override
@@ -178,6 +184,7 @@ public class InMemoryTaskManager implements Manager {
     public void deleteTaskById(int id){
         if(listTask.containsKey(id)){
             listTask.remove(id);
+            history.remove(id);
             System.out.println("Задача удалена.");
         }else{
             System.out.println("Задачи с таким id не существует.");
@@ -189,9 +196,12 @@ public class InMemoryTaskManager implements Manager {
     // Удаление эпика по идентификатору.
     public void deleteEpicById(int id){
         if(listEpic.containsKey(id)){
-            Epic currentEpic = getEpicById(id);
-            deleteAllSubtasks(currentEpic);
-            listEpic.remove(id);
+            Epic currentEpic = listEpic.get(id);
+            Epic epic = listEpic.get(id);
+            for(int subtaskId : epic.getSubtaskIds()){
+                listSubtask.remove(subtaskId);
+                history.remove(subtaskId);
+            }
             System.out.println("Эпик удален.");
 
         }else{
@@ -204,29 +214,40 @@ public class InMemoryTaskManager implements Manager {
     // Удаление подзадачи по идентификатору.
     public void deleteSubtaskById(int id){
         if(listSubtask.containsKey(id)){
-            listTask.remove(id);
-            System.out.println("Подзадача удалена.");
+            int epicId = listSubtask.get(id).getEpicId();
+            Subtask subtask = listSubtask.get(id);
+            Epic epic = this.getEpicById(subtask.getEpicId());
+            if(listSubtask.containsKey(id)){
+                if(listEpic.containsKey(epic.getId())){
+                    listEpic.get(epicId).getSubtaskIds().remove(id);
+                    updateEpicStatus(epic);
+                    listSubtask.remove(id);
+                    history.remove(id);
+                    System.out.println("Подзадача удалена.");
+                }
+            }
         }else{
             System.out.println("Подзадачи с таким id не существует.");
             System.out.println("Не удалось удалить подзадачу.");
         }
-        updateEpicStatus(listEpic.get(id));
     }
 
     @Override
     // Дополнительные методы:
     // Получение списка всех подзадач определённого эпика.
-    public List<Task> getSubtaskListByEpic(Epic epic){
-        List<Task> subListById = new ArrayList<>();
-        if (listEpic.containsKey(epic.getId())) {
-            for(Integer subtaskId : listEpic.get(epic.getId()).getSubtasksId()) {
-                subListById.add(getSubtaskById(subtaskId));
+    public ArrayList<Subtask> getSubtaskListByEpic(int id){
+        if (listEpic.containsKey(id)) {
+            ArrayList<Subtask> subtasksNew = new ArrayList<>();
+            Epic epic = listEpic.get(id);
+            for(int i = 0; i < epic.getSubtaskIds().size(); i++){
+                subtasksNew.add(listSubtask.get(epic.getSubtaskIds().get(i)));
             }
+            return subtasksNew;
         } else {
             System.out.println("Эпика с таким id не существует.");
             System.out.println("Не удалось получить список подзадач.");
         }
-        return subListById;
+        return new ArrayList<>();
     }
 
     @Override
@@ -239,12 +260,13 @@ public class InMemoryTaskManager implements Manager {
         }
         Status status = null;
         for(int id : subs){
-            final Subtask subtask = listSubtask.get(id);
+            Subtask subtask = listSubtask.get(id);
             if(status==null){
                 status = subtask.getStatus();
                 continue;
             }
-            if(status.equals(subtask.getStatus())&&!status.equals("IN_PROGRESS")){
+            if(status.equals(subtask.getStatus())
+                    && !status.equals(Status.IN_PROGRESS)) {
                 continue;
             }
             epic.setStatus(IN_PROGRESS);
@@ -286,10 +308,10 @@ public class InMemoryTaskManager implements Manager {
         }
     }
 
+    // История просмотров задач
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return history.getHistory();
     }
-
 
 }

@@ -10,40 +10,37 @@ import java.util.List;
 public interface Manager {
 
     // Создание задачи
-    void addTask(Task task);
+    int addTask(Task task);
 
 
     // Создание эпика
-    void addEpic(Epic epic);
+    int addEpic(Epic epic);
 
 
     // Создание подзадачи
-    void addSubtask(Subtask subtask);
+    int addSubtask(Subtask subtask);
 
 
     //Получение списка всех задач.
-    ArrayList<Task> printAndGetTasks();
+    List<Task> printAndGetTasks();
 
 
     //Получение списка всех эпиков.
-    ArrayList<Epic> printAndGetEpics();
+    List<Epic> printAndGetEpics();
 
 
     //Получение списка всех подзадач.
-    ArrayList<Subtask> printAndGetSubtasks();
+    List<Subtask> printAndGetSubtasks();
 
 
     //Удаление всех задач.
     void deleteAllTasks();
 
-
     //Удаление всех эпиков.
     void deleteAllEpics();
 
-
     //Удаление всех подзадач.
-    void deleteAllSubtasks(Epic epic);
-
+    void deleteAllSubtasks();
 
     //Получение задачи по идентификатору.
     Task getTaskById(int id);
@@ -61,14 +58,11 @@ public interface Manager {
     // Обновление задачи.
     void updateTask(Task task);
 
-
     // Обновление эпика.
     void updateEpic(Epic epic);
 
-
     // Обновление подзадачи.
-    void updateSubtask(Epic epic, Subtask subtask);
-
+    void updateSubtask(Subtask subtask);
 
     // Удаление задачи по идентификатору.
     void deleteTaskById(int id);
@@ -84,7 +78,7 @@ public interface Manager {
 
     // Дополнительные методы:
     // Получение списка всех подзадач определённого эпика.
-    List<Task> getSubtaskListByEpic(Epic epic);
+    ArrayList<Subtask> getSubtaskListByEpic(int id);
 
 
     // Обновление статуса эпика.
@@ -96,8 +90,6 @@ public interface Manager {
 
 
     // История просмотров задач
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
 
-
-    void remove(int i);
 }
