@@ -17,10 +17,10 @@ public class InMemoryTaskManager implements Manager {
     private int id = 1;
 
     // Возможность хранить задачи всех типов.
-    private Map <Integer, Task> listTask = new HashMap<>();
-    private Map<Integer, Epic> listEpic = new HashMap<>();
-    private Map <Integer, Subtask> listSubtask = new HashMap<>();
-    private HistoryManager history = Managers.getDefaultHistory();
+    private final Map <Integer, Task> listTask = new HashMap<>();
+    private final Map<Integer, Epic> listEpic = new HashMap<>();
+    private final Map <Integer, Subtask> listSubtask = new HashMap<>();
+    private final HistoryManager history = Managers.getDefaultHistory();
 
     // Создание задачи
     @Override
@@ -213,7 +213,6 @@ public class InMemoryTaskManager implements Manager {
     @Override
     // Удаление подзадачи по идентификатору.
     public void deleteSubtaskById(int id){
-        if(listSubtask.containsKey(id)){
             int epicId = listSubtask.get(id).getEpicId();
             Subtask subtask = listSubtask.get(id);
             Epic epic = this.getEpicById(subtask.getEpicId());
@@ -226,10 +225,6 @@ public class InMemoryTaskManager implements Manager {
                     System.out.println("Подзадача удалена.");
                 }
             }
-        }else{
-            System.out.println("Подзадачи с таким id не существует.");
-            System.out.println("Не удалось удалить подзадачу.");
-        }
     }
 
     @Override
@@ -313,5 +308,13 @@ public class InMemoryTaskManager implements Manager {
     public List<Task> getHistory() {
         return history.getHistory();
     }
+
+    @Override
+    public String toString() {
+        return "InMemoryTaskManager{" +
+                "history=" + history +
+                '}';
+    }
+
 
 }

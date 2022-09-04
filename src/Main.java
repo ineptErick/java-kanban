@@ -49,43 +49,46 @@ public class Main {
         manager.addEpic(epicSecond);
         manager.updateEpicStatus(epicSecond);
 
+        System.out.println("Вывожу списков всех задач, эпиков и подзадач:");
+        System.out.println(manager.printAndGetTasks());
+        System.out.println(manager.printAndGetEpics());
+        System.out.println(manager.printAndGetSubtasks());
+
+        System.out.println("Запрашиваю данные разных задач: ");
         // запросите созданные задачи несколько раз в разном порядке;
-        System.out.println("Запрашиваю таску с индексом 6...");
-        manager.getEpicById(6);
-        int taskSecondId = manager.addTask(taskSecond);
-        manager.getHistory();
-        System.out.println("Запрашиваю таску с индексом 0...");
-        manager.getTaskById(0);
-        manager.getHistory();
-        System.out.println("Запрашиваю таску с индексом 2...");
-        manager.getEpicById(2);
-        manager.getHistory();
-        System.out.println("Запрашиваю таску с индексом 6 еще раз...");
-        manager.getEpicById(6);
-        manager.getHistory();
-        System.out.println("Запрашиваю таску с индексом 2 еще раз...");
-        manager.getEpicById(2);
-        manager.getHistory();
+        System.out.println("Запрашиваю вторую задачу...");
+        manager.getTaskById(taskSecond.getId());
+        System.out.println("История просмотров: " + manager.getHistory());
+        System.out.println("Запрашиваю третью подзадачу первого эпика...");
+        manager.getSubtaskById(subtaskThird.getId());
+        System.out.println("История просмотров: " + manager.getHistory());
+        System.out.println("Запрашиваю первую задачу...");
+        manager.getTaskById(taskFirst.getId());
+        System.out.println("История просмотров: " + manager.getHistory());
+        System.out.println("Запрашиваю первую подзадачу первого эпика...");
+        manager.getSubtaskById(subtaskFirst.getId());
+        System.out.println("История просмотров: " + manager.getHistory());
+        System.out.println("Запрашиваю вторую задачу...");
+        manager.getTaskById(taskSecond.getId());
+        System.out.println("История просмотров: " + manager.getHistory());
 
         // после каждого запроса выведите историю и убедитесь,
         // что в ней нет повторов;
-        manager.getHistory();
-        // в итоге должно быть 0 6 2
 
         // удалите задачу, которая есть в истории,
         // и проверьте, что при печати она не будет выводиться;
-        System.out.println("Удаляю вторую задачу...");
-        manager.deleteTaskById(taskSecond.getId());
-        manager.getHistory();
-        System.out.println("Вторая задача должна быть удалена.");
+        System.out.println("Удаляю первую подзадачу первого эпика...");
+        manager.deleteTaskById(taskFirst.getId());
+        System.out.println("Первая подзадача первого эпика должна быть удалена.");
+        System.out.println("История просмотров: " + manager.getHistory());
 
         // удалите эпик с тремя подзадачами и убедитесь,
-        // что из истории удалился как сам эпик,
+        // что из истории удалился как сам эпик
         // так и все его подзадачи.
         System.out.println("Удаляю эпик с тремя подзадачами...");
         manager.deleteEpicById(epicFirst.getId());
         manager.getEpicById(epicFirst.getId());
-        manager.getHistory();
+        System.out.println("История просмотров: " + manager.getHistory());
         System.out.println("Эпик с тремя подзадачами должен быть удален.");
 
         System.out.println("Конец программы.");
