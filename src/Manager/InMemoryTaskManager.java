@@ -27,7 +27,7 @@ public class InMemoryTaskManager implements Manager {
     public int addTask(Task task) {
         task.setId(id++);
         listTask.put(task.getId(), task);
-        //history.add(task);
+        history.add(task);
         return task.getId();
     }
 
@@ -36,7 +36,7 @@ public class InMemoryTaskManager implements Manager {
     public int addEpic(Epic epic) {
         epic.setId(id++);
         listEpic.put(epic.getId(),epic);
-        //history.add(epic);
+        history.add(epic);
         return epic.getId();
     }
 
