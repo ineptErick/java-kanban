@@ -3,7 +3,7 @@ package Models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Epic extends Task{
+public class Epic extends Task {
 
     private List<Integer> subtaskIds = new ArrayList<>();
 
@@ -11,7 +11,7 @@ public class Epic extends Task{
         super(name, description, status);
     }
 
-    public void addSubtask(int subId){
+    public void addSubtask(int subId) {
         this.subtaskIds.add(subId);
     }
 
