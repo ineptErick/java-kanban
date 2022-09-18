@@ -1,5 +1,7 @@
 package Models;
 
+import Enums.Status;
+
 public class Task {
     protected int id;
     protected String name;

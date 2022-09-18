@@ -1,7 +1,7 @@
 package Manager;
 
 import Models.Epic;
-import Models.Subtask;
+import Models.SubTask;
 import Models.Task;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public interface TaskManager {
     int addTask(Task task);
 
     // Метод создания Подзадачи subTask
-    int addSubtask(Subtask subTask);
+    int addSubtask(SubTask subTask);
 
     // Метод создания Эпика tasks.Epic
     int addEpic(Epic epic);
@@ -34,13 +34,13 @@ public interface TaskManager {
     List<Task> getTasks();
 
     // Получение списка подзадач
-    List<Subtask> getSubTask();
+    List<SubTask> getSubTask();
 
     // Получение Задач по идентификатору
     Task getTaskById(int id);
 
     // Получение Подзадач по идентификатору
-    Subtask getSubTaskById(int id);
+    SubTask getSubTaskById(int id);
 
     // Получение Эпика по идентификатору
     Epic getEpicById(int id);
@@ -49,7 +49,7 @@ public interface TaskManager {
     void updateTask(Task task);
 
     // Обновление Подзадач
-    void updateSubTask(Subtask subTask);
+    void updateSubTask(SubTask subTask);
 
     // Обновление Эпиков
     void updateEpic(Epic epic);
@@ -67,7 +67,7 @@ public interface TaskManager {
     void deleteByIdEpic(int id);
 
     // Получение списка всех подзадач определённого эпика
-    ArrayList<Subtask> getSubTasksOfEpic(int id);
+    ArrayList<SubTask> getSubTasksOfEpic(int id);
 
     // История просмотров задач
     List<Task> getHistory();

@@ -1,10 +1,10 @@
 import Manager.TaskManager;
 import Manager.Managers;
 import Models.Epic;
-import Models.Subtask;
+import Models.SubTask;
 import Models.Task;
 
-import static Models.Status.NEW;
+import static Enums.Status.NEW;
 
 public class Main {
     public static void main(String[] args) {
@@ -29,18 +29,18 @@ public class Main {
         taskManager.updateEpicStatus(epicFirst);
 
         System.out.println("Создаю 1-ю подзадачу эпика...");
-        Subtask subtaskFirst = new Subtask("Первая подзадача первого эпика", "Описание первой подзадачи", NEW, epicFirst.getId());
-        taskManager.addSubtask(subtaskFirst);
+        SubTask subTaskFirst = new SubTask("Первая подзадача первого эпика", "Описание первой подзадачи", NEW, epicFirst.getId());
+        taskManager.addSubtask(subTaskFirst);
         taskManager.updateEpicStatus(epicFirst);
 
         System.out.println("Создаю 2-ю подзадачу эпика...");
-        Subtask subtaskSecond = new Subtask("Вторая подзадача первого эпика", "Описание второй подзадачи", NEW, epicFirst.getId());
-        taskManager.addSubtask(subtaskSecond);
+        SubTask subTaskSecond = new SubTask("Вторая подзадача первого эпика", "Описание второй подзадачи", NEW, epicFirst.getId());
+        taskManager.addSubtask(subTaskSecond);
         taskManager.updateEpicStatus(epicFirst);
 
         System.out.println("Создаю 3-ю подзадачу эпика...");
-        Subtask subtaskThird = new Subtask("Третья подзадача первого эпика", "Описание второй подзадачи", NEW, epicFirst.getId());
-        taskManager.addSubtask(subtaskSecond);
+        SubTask subTaskThird = new SubTask("Третья подзадача первого эпика", "Описание второй подзадачи", NEW, epicFirst.getId());
+        taskManager.addSubtask(subTaskSecond);
         taskManager.updateEpicStatus(epicFirst);
 
         // и эпик без подзадач
@@ -60,14 +60,14 @@ public class Main {
         System.out.println("История просмотров: " + taskManager.getHistory());
         System.out.println(taskManager.getTaskById(epicSecond.getId()));
         System.out.println("История просмотров: " + taskManager.getHistory());
-        System.out.println(taskManager.getTaskById(subtaskThird.getId()));
+        System.out.println(taskManager.getTaskById(subTaskThird.getId()));
         System.out.println("История просмотров: " + taskManager.getHistory());
         System.out.println(taskManager.getTaskById(taskSecond.getId()));
         System.out.println("История просмотров: " + taskManager.getHistory());
 
         taskManager.getTaskById(taskFirst.getId());
-        taskManager.getTaskById(subtaskThird.getId());
-        taskManager.getTaskById(subtaskThird.getId());
+        taskManager.getTaskById(subTaskThird.getId());
+        taskManager.getTaskById(subTaskThird.getId());
         taskManager.getTaskById(epicSecond.getId());
         // после каждого запроса выведите историю и убедитесь,
         // что в ней нет повторов;
@@ -86,9 +86,9 @@ public class Main {
         taskManager.deleteByIdTask(epicFirst.getId());
         // так и все его подзадачи
         System.out.println("Удаляем Эпик 1 с 3-мя подзадачами: " + taskManager.getEpicById(epicFirst.getId()));
-        System.out.println("Удалённая Подзадача 1 Эпика 1: " + taskManager.getSubTaskById(subtaskFirst.getId()));
-        System.out.println("Удалённая Подзадача 2 Эпика 2: " + taskManager.getSubTaskById(subtaskSecond.getId()));
-        System.out.println("Удалённая Подзадача 3 Эпика 3: " + taskManager.getSubTaskById(subtaskThird.getId()));
+        System.out.println("Удалённая Подзадача 1 Эпика 1: " + taskManager.getSubTaskById(subTaskFirst.getId()));
+        System.out.println("Удалённая Подзадача 2 Эпика 2: " + taskManager.getSubTaskById(subTaskSecond.getId()));
+        System.out.println("Удалённая Подзадача 3 Эпика 3: " + taskManager.getSubTaskById(subTaskThird.getId()));
 
         System.out.println("История просмотров: " + taskManager.getHistory());
 

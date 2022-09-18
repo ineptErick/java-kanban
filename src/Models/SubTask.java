@@ -1,9 +1,11 @@
 package Models;
 
-public class Subtask extends Task {
+import Enums.Status;
+
+public class SubTask extends Task {
     protected int epicId;
 
-    public Subtask(String name, String description, Status status, int epicId) {
+    public SubTask(String name, String description, Status status, int epicId) {
         super(name, description, status);
         this.epicId = epicId;
     }
