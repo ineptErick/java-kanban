@@ -13,10 +13,14 @@ import java.util.Map;
 public class InMemoryTaskManager implements TaskManager {
 
     private int nextId = 1; // Объявление , инициализация начального идентификатора
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, SubTask> subTasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    private static final Map<Integer, Task> tasks = new HashMap<>();
+    private static final Map<Integer, SubTask> subTasks = new HashMap<>();
+    private static final Map<Integer, Epic> epics = new HashMap<>();
+    private static final HistoryManager historyManager = Managers.getDefaultHistory();
+
+    public InMemoryTaskManager() {
+
+    }
 
     // Метод создания простой Задачи task
     @Override
@@ -218,11 +222,25 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
     @Override
     public String toString() {
         return "InMemoryTaskManager{" +
                 "historyManager=" + historyManager +
                 '}';
+    }
+
+    public static void addToHistory(int id) {
+        if (epics.containsKey(id)) {
+            historyManager.add(epics.get(id));
+        } else if (subTasks.containsKey(id)) {
+            historyManager.add(subTasks.get(id));
+        } else if (tasks.containsKey(id)) {
+            historyManager.add(tasks.get(id));
+        }
     }
 
 }
