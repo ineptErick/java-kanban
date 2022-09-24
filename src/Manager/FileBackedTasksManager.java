@@ -38,10 +38,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             }
             bufferedWriter.write("\n"); // Добавить пустую строку
             bufferedWriter.write(HistoryManager.historyToString(getHistoryManager()));
-        } catch (FileNotFoundException e) {
-            throw new ManagerSaveException("Ошибка! Файл не найден!");
         } catch (IOException e) {
-                throw new ManagerSaveException("Произошла ошибка во время записи файла");
+            throw new ManagerSaveException("Произошла ошибка во время записи файла");
         }
     }
 
@@ -108,7 +106,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     // Метод восстанавливает данные менеджера из файла при запуске программы
-    public FileBackedTasksManager loadFromFile(File file) {
+    public static FileBackedTasksManager loadFromFile(File file) {
         final FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager();
         try (BufferedReader br = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             br.readLine();
@@ -121,17 +119,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 Task task = fromString(line);
 
                 if (task instanceof Epic epic) {
-                    addEpic(epic);
+                    fileBackedTasksManager.addEpic(epic);
                 } else if (task instanceof SubTask subTask) {
-                    addSubtask(subTask);
+                    fileBackedTasksManager.addSubtask(subTask);
                 } else {
-                    addTask(task);
+                    fileBackedTasksManager.addTask(task);
                 }
             }
             String lineWithHistory = br.readLine();
-            for (int id : historyFromString(lineWithHistory)) {
-                addToHistory(id);
+            if(lineWithHistory!=null){
+                for (int id : historyFromString(lineWithHistory)) {
+                    addToHistory(id);
+                    //return null;
+                }
+            }else{
+                return null;
             }
+
 
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла ошибка во время чтения файла!");
@@ -293,7 +297,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public static void main(String[] args) {
 
-        TaskManager manager = Managers.getDefaultTask();
+        TaskManager manager = (TaskManager) Managers.getDefaultHistory();
 
         System.out.println("\nСоздание простой задачи");
         Task task16 = new Task("16 Наименование простой задачи 1", "1 Описание простой задачи 1", Status.NEW);
@@ -326,28 +330,30 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         int subTask3Id = manager.addSubtask(subTask3);
         System.out.println("id Подзадачи номер 3 subTask3Id: " + subTask3Id);
 
-        System.out.println("Создание Эпика 2 без Подзадачи");
+        System.out.println("\nСоздание Эпика 2 без Подзадачи");
         Epic epic2 = new Epic("2 Наименование Эпик 2", "2 Описание Эпик 2", Status.NEW);
         int epic2Id = manager.addEpic(epic2);
         System.out.println("id Эпика номер 2 epic2Id: " + epic2Id);
 
-        System.out.println("Создание Подзадачи 4 для 2 Эпика");
-        SubTask subtask3 = new SubTask("Наименование Подзадачи 4", "Описание Подзадачи 4", Status.NEW, epic2Id);
-        int subTask4Id = manager.addSubtask(subTask3);
-        System.out.println("id Подзадачи номер 4 subTask3Id: " + subTask3Id);
+        /*
+        System.out.println("Создание Подзадачи 3 для 2 Эпика");
+        SubTask subTask3 = new SubTask("Наименование Подзадачи 3", "Описание Подзадачи 3", Status.NEW, epic2Id);
+        int subTask3Id = taskManager.addSubTask(subTask3);
+        System.out.println("id Подзадачи номер 3 subTask3Id: " + subTask3Id);
+        */
 
-        System.out.println("Вывод списков Эпиков, Задач, Подзадач");
+        System.out.println("\nВывод списков Эпиков, Задач, Подзадач");
         System.out.println(manager.getEpics());
-        System.out.println(manager.getTasks());
+        //     System.out.println(taskManager.getTasks());
         System.out.println(manager.getSubTask());
 
-        System.out.println("Обновление простой задачи");
+        System.out.println("\nОбновление простой задачи");
         Task taskUpdate = new Task("Обновили Наименования Задачи 1", "Обновили Описание Задачи 1", Status.IN_PROGRESS);
         taskUpdate.setId(16);
         manager.updateTask(taskUpdate);
         manager.updateTask(new Task("Обновили Наименования Задачи 2", "Обновили Описание Задачи 2", Status.DONE));
 
-        System.out.println("Обновление подзадачи");
+        System.out.println("\nОбновление подзадачи");
         manager.updateSubTask(new SubTask(
                 "Обновили Наименование Подзадачи 1 Эпик 1", "Обновили Описание Подзадачи 1",
                 Status.IN_PROGRESS, epic1Id));
@@ -358,7 +364,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 "Обновили Наименование Подзадачи 1 Эпик 2", "Обновили Описание Подзадачи 1",
                 Status.DONE, epic2Id));
 
-        System.out.println("Вызов методов");
+        System.out.println("\nВызов методов");
         System.out.println(manager.getTaskById(task2Id));
         System.out.println("История просмотров16: " + manager.getHistory());
         System.out.println(manager.getTaskById(task2Id));
@@ -376,9 +382,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.getTaskById(task3Id);
         manager.getTaskById(task16Id);
         manager.getTaskById(task16Id);
-        System.out.println("История просмотров несколько: " + manager.getHistory());
+        System.out.println("\nИстория просмотров несколько: " + manager.getHistory());
 
-        System.out.println("Вызов Эпиков");
+        System.out.println("\nВызов Эпиков");
         System.out.println(manager.getEpicById(epic1Id));
         System.out.println("История просмотров: " + manager.getHistory());
         System.out.println(manager.getEpicById(epic2Id));
@@ -394,7 +400,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println("История просмотров: " + manager.getHistory());
 
         System.out.println(manager.getSubTaskById(subTask1Id));
-        System.out.println("История просмотров: " + manager.getHistory());
+        System.out.println("\nИстория просмотров: " + manager.getHistory());
         System.out.println(manager.getSubTaskById(subTask3Id));
         System.out.println("История просмотров: " + manager.getHistory());
         System.out.println(manager.getSubTaskById(subTask2Id));
@@ -403,7 +409,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println("История просмотров: " + manager.getHistory());
 
         System.out.println(manager.getTaskById(task16Id));
-        System.out.println("История просмотров: " + manager.getHistory());
+        System.out.println("\nИстория просмотров: " + manager.getHistory());
         System.out.println(manager.getTaskById(task3Id));
         System.out.println("История просмотров: " + manager.getHistory());
         System.out.println(manager.getTaskById(task2Id));
@@ -417,8 +423,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         System.out.println("Удалённая задача 1: " + manager.getTaskById(task16Id));
         System.out.println("История просмотров: " + manager.getHistory());
 
-        FileBackedTasksManager managerFile = new FileBackedTasksManager();
-        managerFile.loadFromFile(new File("src/testing/tasks.csv"));
+        FileBackedTasksManager managerFile = FileBackedTasksManager.loadFromFile(new File("src/upload/tasks_file.csv"));
 
         for (Task task : managerFile.getTasks()) {
             boolean res = task.toString().equals(managerFile.getTasks().get(task.getId()).toString());
